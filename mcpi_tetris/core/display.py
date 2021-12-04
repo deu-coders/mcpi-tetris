@@ -38,6 +38,12 @@ class DisplayAdapter:
         """
         pass
 
+    def ongameover(self):
+        """
+        게임 오버되었을 때 호출되는 함수
+        """
+        pass
+
     def requestnextframe(self):
         """
         다음 화면을 그릴 때 호출되는 함수

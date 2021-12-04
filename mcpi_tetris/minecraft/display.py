@@ -1,12 +1,9 @@
 from typing import Optional
-from tetris.basic import Block, Color, Position
-from tetris.display import DisplayAdapter
+from mcpi_tetris.core.basic import Block, Color, Position
+from mcpi_tetris.core.display import DisplayAdapter
 from mcpi.minecraft import Minecraft
 from mcpi.vec3 import Vec3
 from mcpi.block import AIR, WOOL
-
-
-mc = None
 
 
 class McpiDisplayAdapter(DisplayAdapter):
@@ -14,22 +11,22 @@ class McpiDisplayAdapter(DisplayAdapter):
     display_pos: Vec3
     """디스플레이의 기준이 되는 좌표"""
 
+    minecraft: Minecraft
+    """마인크래프트 인스턴스"""
+
     player_id: int
     """테트리스를 조작하는 플레이어의 엔티티 ID"""
 
-    def __init__(self, player_id: int = None):
-        global mc
-        if mc is None:
-            mc = Minecraft.create()
+    def __init__(self, minecraft: Minecraft, player_id: int = None):
+        self.minecraft = minecraft
 
         if player_id is None:
-            player_id = mc.getPlayerEntityIds()[0]
+            player_id = self.minecraft.getPlayerEntityIds()[0]
         
         self.player_id = player_id
 
     def initialize(self):
-        global mc
-        pos = mc.entity.getPos(self.player_id)
+        pos = self.minecraft.entity.getPos(self.player_id)
 
         # XXXXXX
         # X    X
@@ -39,18 +36,18 @@ class McpiDisplayAdapter(DisplayAdapter):
         # XXXXXX
         #  ↑ Here
         pos.x -= self.width // 2
-        pos.y += self.height + 1
+        pos.z -= 20
 
         self.display_pos = pos
 
         # make frame
         for y in [-1, self.height]:
             for x in range(-1, self.width + 1):
-                mc.setBlock(pos.x + x, pos.y + y, pos.z, WOOL.id, 15) # WOOL (Black)
+                self.minecraft.setBlock(pos.x + x, pos.y + y, pos.z, WOOL.id, 15) # WOOL (Black)
 
         for x in [-1, self.width]:
             for y in range(-1, self.height + 1):
-                mc.setBlock(pos.x + x, pos.y + y, pos.z, WOOL.id, 15) # WOOL (Black)
+                self.minecraft.setBlock(pos.x + x, pos.y + y, pos.z, WOOL.id, 15) # WOOL (Black)
 
     def get_wool_color(self, color: Color) -> int:
         """테트리스 Color를 마인크래프트 양털 컬러로 변환"""
@@ -76,13 +73,21 @@ class McpiDisplayAdapter(DisplayAdapter):
         pos = self.display_pos
 
         if block is None:
-            mc.setBlock(pos.x + position.x, pos.y + position.y, pos.z, AIR.id)
+            self.minecraft.setBlock(pos.x + position.x, pos.y + position.y, pos.z, AIR.id)
         else:
-            mc.setBlock(pos.x + position.x, pos.y + position.y, pos.z, WOOL.id, self.get_wool_color(block.color))
+            self.minecraft.setBlock(pos.x + position.x, pos.y + position.y, pos.z, WOOL.id, self.get_wool_color(block.color))
+    
+    def ongameover(self):
+        pos = self.display_pos
+
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.minecraft.getBlock(pos.x + x, pos.y + y, pos.z) == WOOL.id:
+                    self.minecraft.setBlock(pos.x + x, pos.y + y, pos.z, WOOL.id, 7) # WOOL (grey)
 
     def close(self):
         pos = self.display_pos
 
         for y in range(-1, self.height + 1):
             for x in range(-1, self.width + 1):
-                mc.setBlock(pos.x + x, pos.y + y, pos.z, AIR.id)
+                self.minecraft.setBlock(pos.x + x, pos.y + y, pos.z, AIR.id)
