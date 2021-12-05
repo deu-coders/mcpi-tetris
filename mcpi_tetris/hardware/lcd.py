@@ -1,15 +1,14 @@
-import i2c as drivers
-
+from .i2c import Lcd as InternalLcd
 from .hardware import Hardware
 
 
 class Lcd(Hardware):
 
-    display: drivers.Lcd
+    display: InternalLcd
 
     def initialize(self):
         self.name = 'LCD'
-        self.display = drivers.Lcd()
+        self.display = InternalLcd()
 
     def send(self, line: int, message: str):
         self.display.lcd_display_string(message, line)

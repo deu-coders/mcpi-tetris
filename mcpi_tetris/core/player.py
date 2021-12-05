@@ -119,6 +119,7 @@ class TetrisPlayer:
             destroyed_lines = self.board.destroy_completed_lines()
             if destroyed_lines > 0:
                 self.display_adapter.onlinecompleted(destroyed_lines)
+                self.game.onlinecompleted()
                 self.destroyed_lines += destroyed_lines
 
             # 다음 테트로미노 생성

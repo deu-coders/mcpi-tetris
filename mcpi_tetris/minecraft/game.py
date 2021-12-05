@@ -1,4 +1,5 @@
 from typing import Dict
+import time
 from mcpi.minecraft import Minecraft
 from mcpi_tetris.core.network import ControllerNetwork, CONTROLLER_SERVER_PORT
 from mcpi_tetris.core.controller import Controller
@@ -18,6 +19,8 @@ class McpiTetrisGame(TetrisGame):
     led: Led
     lcd: Lcd
 
+    turn_on_led_until: int = 0
+
     def __init__(self, minecraft: Minecraft):
         super().__init__()
         self.minecraft = minecraft
@@ -29,6 +32,9 @@ class McpiTetrisGame(TetrisGame):
 
         self.led = Led()
         self.lcd = Lcd()
+
+        self.led.initialize()
+        self.lcd.initialize()
 
     def create_controller(self, player_id: int) -> Controller:
         return Controller(player_id) # 빈 컨트롤러 사용
@@ -73,17 +79,25 @@ class McpiTetrisGame(TetrisGame):
                 self.print_message(f'Player {player_id} join the world')
                 self.add_controller(self.create_controller(player_id))
 
+    def posttick(self):
+        if self.turn_on_led_until != 0:
+            if time.time() > self.turn_on_led_until:
+                self.led.off()
+                self.turn_on_led_until = 0
+
     def poststop(self):
         self.network.close()
 
     def onlinecompleted(self):
         self.led.on('#00ff00')
+        self.turn_on_led_until = time.time() + 2
 
         players = sorted(self.players.values(), key=lambda player: -player.destroyed_lines)
 
-        for i in range(2):
-            if len(players) >= i:
+        i = 0
+        for player in players:
+            i += 1
+            if i > 2:
                 break
 
-            player = players[i]
-            self.lcd.send(1, f'Player {player.controller.player_id}: {player.destroyed_lines}')
+            self.lcd.send(i, f'Player {player.controller.player_id}: {player.destroyed_lines}')

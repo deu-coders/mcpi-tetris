@@ -160,6 +160,9 @@ class TetrisGame:
     def posttick(self):
         pass
 
+    def onlinecompleted(self):
+        pass
+
 
 class ConsoleTetrisGame(TetrisGame):
 

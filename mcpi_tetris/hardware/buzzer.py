@@ -1,7 +1,7 @@
 from typing import Any
 import RPi.GPIO as GPIO
 import time
-import constants
+import mcpi_tetris.hardware.constants as constants
 from .hardware import Hardware
 
 
@@ -135,7 +135,7 @@ WHOLENOTE = (60 * 4) / TEMPO
 
 class Buzzer(Hardware):
 
-    buzzer_pwm: Any
+    buzzer_pwm: Any = None
 
     def initialize(self):
         self.setup(constants.PIN_BUZZER, GPIO.OUT)
@@ -143,6 +143,9 @@ class Buzzer(Hardware):
         self.buzzer_pwm.start(50)
 
     def play_tetris_bgm(self):
+        if self.buzzer_pwm is None:
+            self.initialize()
+
         while True:
             try:
                 for melody in MELODIES:
