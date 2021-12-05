@@ -43,11 +43,11 @@ class RPiGPIOJoystickController(Controller):
         for pin in [self.pin_up, self.pin_down, self.pin_left, self.pin_right, self.pin_land]:
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-        GPIO.add_event_detect(self.pin_up, GPIO.RISING, callback=lambda: self.push(TetrisKey.UP), bouncetime=200)
-        GPIO.add_event_detect(self.pin_down, GPIO.RISING, callback=lambda: self.push(TetrisKey.DOWN), bouncetime=200)
-        GPIO.add_event_detect(self.pin_left, GPIO.RISING, callback=lambda: self.push(TetrisKey.LEFT), bouncetime=200)
-        GPIO.add_event_detect(self.pin_right, GPIO.RISING, callback=lambda: self.push(TetrisKey.RIGHT), bouncetime=200)
-        GPIO.add_event_detect(self.pin_land, GPIO.RISING, callback=lambda: self.push(TetrisKey.LAND), bouncetime=200)
+        GPIO.add_event_detect(self.pin_up, GPIO.RISING, callback=lambda _: self.push(TetrisKey.UP), bouncetime=200)
+        GPIO.add_event_detect(self.pin_down, GPIO.RISING, callback=lambda _: self.push(TetrisKey.DOWN), bouncetime=200)
+        GPIO.add_event_detect(self.pin_left, GPIO.RISING, callback=lambda _: self.push(TetrisKey.LEFT), bouncetime=200)
+        GPIO.add_event_detect(self.pin_right, GPIO.RISING, callback=lambda _: self.push(TetrisKey.RIGHT), bouncetime=200)
+        GPIO.add_event_detect(self.pin_land, GPIO.RISING, callback=lambda _: self.push(TetrisKey.LAND), bouncetime=200)
 
     def close(self):
         for pin in [self.pin_up, self.pin_down, self.pin_left, self.pin_right, self.pin_land]:
