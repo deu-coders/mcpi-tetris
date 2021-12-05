@@ -44,6 +44,7 @@ class TetrisGame:
 
     def create_player(self, player_id: int) -> TetrisPlayer:
         return TetrisPlayer(
+            game=self,
             width=10,
             height=20,
             controller=KeyboardArrowController(),
@@ -172,6 +173,7 @@ class ConsoleTetrisGame(TetrisGame):
 
     def create_player(self, player_id: int) -> TetrisPlayer:
         return TetrisPlayer(
+            game=self,
             width=self.width,
             height=self.height,
             controller=self.get_controller(player_id),

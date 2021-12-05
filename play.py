@@ -1,8 +1,9 @@
 import argparse
+import subprocess
+from dotenv import load_dotenv
 
 from mcpi_tetris.minecraft.nametools import get_username, set_username
 from mcpi_tetris.core.controller import Controller
-
 
 parser = argparse.ArgumentParser(description='Tetris over the mcpi!')
 parser.add_argument('mode',
@@ -19,12 +20,14 @@ parser.add_argument('mode',
         'client-keyboard-wasd',
         'client-joystick',
         'client-stdin',
+        'music',
     ),
     help='테트리스 동작 모드를 설정합니다.'
 )
 
 args = parser.parse_args()
 
+load_dotenv()
 
 def get_controller(controller_name: str, player_id: int) -> Controller:
     if controller_name == 'keyboard-arrow':
@@ -36,7 +39,7 @@ def get_controller(controller_name: str, player_id: int) -> Controller:
         return KeyboardWASDController(player_id)
 
     elif controller_name == 'joystick':
-        from mcpi_tetris.minecraft.controller import RPiGPIOJoystickController
+        from mcpi_tetris.hardware.controller import RPiGPIOJoystickController
         return RPiGPIOJoystickController(player_id)
 
     elif controller_name == 'stdin':
@@ -57,10 +60,17 @@ elif args.mode == 'host':
     from mcpi.minecraft import Minecraft
     from mcpi_tetris.minecraft.game import McpiTetrisGame
 
+    subprocess.Popen(['python', 'play.py', 'music'])
+
     minecraft = Minecraft.create()
     game = McpiTetrisGame(minecraft)
     # run() method will take infinity loop (to break, keyboard interrupt need)
     game.run()
+
+elif args.mode == 'music':
+    from mcpi_tetris.hardware.buzzer import Buzzer
+    buzzer = Buzzer()
+    buzzer.play_tetris_bgm()
 
 elif args.mode.startswith('stdio-'):
     print(f'You have selected {args.mode}')
@@ -107,3 +117,8 @@ elif args.mode.startswith('client-'):
 
     from mcpi_tetris.minecraft.remote import McpiRemoteControl
     McpiRemoteControl(minecraft, controller, address).run()
+
+
+# Cleanup all hardwares
+from mcpi_tetris.hardware.hardware import Hardware
+Hardware.cleanup_hardwares()

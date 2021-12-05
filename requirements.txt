@@ -1,3 +1,5 @@
 keyboard==0.13.5
 mcpi==1.2.1
 RPi.GPIO==0.7.0
+python-dotenv==0.19.0
+smbus==1.1.post2

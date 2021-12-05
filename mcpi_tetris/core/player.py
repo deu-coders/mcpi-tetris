@@ -1,20 +1,34 @@
 
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 import random
+
 from .basic import Position
 from .controller import Controller, TetrisKey
 from .display import DisplayAdapter
 from .board import TetrisBoard
 from .tetromino import DefaultTetrominoDefinitions, Tetromino, TetrominoDefinition
 
+if TYPE_CHECKING:
+    from .game import TetrisGame
+
 
 class TetrisPlayer:
     """테트리스 게임에 대한 클래스"""
 
+    game: 'TetrisGame'
+    """테트리스 게임 인스턴스"""
+
     width: int = 10
+    """테트리스의 가로 크기"""
+
     height: int = 20
+    """테트리스의 세로 크기"""
+
     display_adapter: DisplayAdapter
+    """진행중인 내용이 표시될 디스플레이"""
+
     controller: Controller
+    """플레이어를 조작중인 Controller"""
 
     tetromino_definitions: List[TetrominoDefinition]
     """정의된 테트로미노 목록"""
@@ -39,12 +53,15 @@ class TetrisPlayer:
 
     def __init__(
         self,
+        game: 'TetrisGame',
         width: int,
         height: int,
         display_adapter: DisplayAdapter,
         controller: Controller,
-        tetromino_definitions: Optional[List[TetrominoDefinition]] = None
+        tetromino_definitions: Optional[List[TetrominoDefinition]] = None,
     ):
+        self.game = game
+
         self.width = width
         self.height = height
 
