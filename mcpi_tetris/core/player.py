@@ -105,6 +105,7 @@ class TetrisPlayer:
     def kill(self):
         self.playing = False
         self.display_adapter.ongameover()
+        self.game.ongameover(self.controller.player_id)
 
     def fall(self):
         """테트로미노가 떨어짐"""

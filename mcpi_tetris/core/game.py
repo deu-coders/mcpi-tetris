@@ -160,6 +160,10 @@ class TetrisGame:
     def posttick(self):
         pass
 
+    def ongameover(self, player_id: int):
+        self.print_message(f'Player {player_id} game over!!!')
+        self.print_message(f'total destroyed lines={self.players[player_id].destroyed_lines}')
+
     def onlinecompleted(self, player_id: int, destroyed_lines: int):
         pass
 
