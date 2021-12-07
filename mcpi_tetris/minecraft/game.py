@@ -86,8 +86,6 @@ class McpiTetrisGame(TetrisGame):
         self.network.close()
 
     def onlinecompleted(self, player_id: int, destroyed_lines: int):
-        self.print_message(f'Player {player_id} destroyed {destroyed_lines} lines!')
-
         self.led.on(0x00FF00)
         self.turn_on_led_until = time.time() + 2
 
