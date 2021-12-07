@@ -37,42 +37,38 @@ class LED(Hardware):
         self.p_G = self.PWM(self.pin_led_g, 1000)
         self.p_B = self.PWM(self.pin_led_b, 1000)
 
-        self.p_R.start(10)
-        self.p_G.start(10)
-        self.p_B.start(10)
-
-    def setColor(self, r: int, g: int, b: int):
-        if not self.assert_hardware_enabled():
-            return
-
-        self.p_R.ChangeDutyCycle(r)
-        self.p_G.ChangeDutyCycle(g)
-        self.p_B.ChangeDutyCycle(b)
+        self.p_R.start(0)
+        self.p_G.start(0)
+        self.p_B.start(0)
 
     def mapping(self, x, in_min, in_max, out_min, out_max):
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
-    def on(self, color: str):
+    def on(self, color_hex: int):
         if not self.assert_hardware_enabled():
             return
 
-        R_val, G_val, B_val = ImageColor.getcolor(color, "RGB")
+        r_val = (color_hex & 0xFF0000) >> 16
+        g_val = (color_hex & 0x00FF00) >> 8
+        b_val = (color_hex & 0x0000FF) >> 0
 
-        R_val = self.mapping(R_val, 0, 255, 0, 100)
-        G_val = self.mapping(G_val, 0, 255, 0, 100)
-        B_val = self.mapping(B_val, 0, 255, 0, 100)
+        r_val = self.mapping(r_val, 0, 255, 0, 100)
+        g_val = self.mapping(g_val, 0, 255, 0, 100)
+        b_val = self.mapping(b_val, 0, 255, 0, 100)
 
-        self.p_R.ChangeDutyCycle(R_val)     
-        self.p_G.ChangeDutyCycle(G_val)
-        self.p_B.ChangeDutyCycle(B_val)
+        self.p_R.ChangeDutyCycle(100 - r_val)     
+        self.p_G.ChangeDutyCycle(100 - g_val)
+        self.p_B.ChangeDutyCycle(100 - b_val)
 
     def off(self):
         if not self.assert_hardware_enabled():
             return
 
-        self.p_R.stop()
-        self.p_G.stop()
-        self.p_B.stop()
+        self.on(0xFFFFFF)
+
+        #self.p_R.ChangeDutyCycle(100)
+        #self.p_G.ChangeDutyCycle(100)
+        #self.p_B.ChangeDutyCycle(100)
 
     def close(self):
         if not self.assert_hardware_enabled():
