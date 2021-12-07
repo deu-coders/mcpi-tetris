@@ -110,6 +110,8 @@ class ControllerNetwork:
             return conn
         except BlockingIOError:
             return None
+        except error:
+            return None
 
     # message format:
     # "49.right:34.land:96.join ..."
@@ -147,5 +149,10 @@ class ControllerNetwork:
         self.sock.send(raw.encode())
 
     def close(self):
-        self.sock.shutdown()
-        self.sock.close()
+        try:
+            self.sock.shutdown(SHUT_RDWR)
+        except Exception as e:
+            print('Error occured while shutdown socket.', e)
+            pass
+        finally:
+            self.sock.close()
