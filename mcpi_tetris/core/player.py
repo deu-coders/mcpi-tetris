@@ -199,6 +199,11 @@ class TetrisPlayer:
                 elif key == TetrisKey.LAND:
                     self.land()
 
+                else:
+                    continue # 다른 키는 무시
+
+                print(f'player_id={self.controller.player_id},tick={self.tick_counter},key={key}')
+
             # 테트로미노가 떨어질 타이밍인지 확인
             if self.tick_counter % self.get_tetromino_fall_ticks() == 0:
                 self.fall()
