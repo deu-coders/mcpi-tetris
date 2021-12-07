@@ -75,7 +75,7 @@ elif args.mode == 'host':
 elif args.mode == 'music':
     from mcpi_tetris.hardware.buzzer import Buzzer
     buzzer = Buzzer()
-    buzzer.play_tetris_bgm()
+    buzzer.play_tetris_bgm_loop()
 
 elif args.mode.startswith('stdio-'):
     print(f'You have selected {args.mode}')
