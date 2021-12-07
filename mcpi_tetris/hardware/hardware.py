@@ -33,22 +33,33 @@ class Hardware:
         self.pwms = []
         self.name = 'Unknown'
 
+        self.initialize()
+
     def initialize(self):
         pass
 
     def print(self, message: str):
         print(f'Hardware {self.name}: {message}')
 
-    def setup(self, pin: int, in_or_out: int):
+    def assert_hardware_enabled(self):
         if not Hardware.enabled:
-            self.print('INFO: hardware request detected. enable GPIO.')
-            Hardware.enable_hardwares()
+            self.print('INFO: hardware request detected, but hardware is disabled. Please enable hardware to use.')
+            return False
+
+        return True
+
+    def setup(self, pin: int, in_or_out: int):
+        if not self.assert_hardware_enabled():
+            return
 
         self.pins.append(pin)
         GPIO.setup(pin, in_or_out)
         self.print(f'INFO: pin {pin} used by {self.name}')
 
     def PWM(self, pin: int, value: int):
+        if not self.assert_hardware_enabled():
+            return
+
         if pin not in self.pins:
             self.print('WARNING: You must call setup before using pin in PWM()')
 
@@ -58,6 +69,9 @@ class Hardware:
         return pwm
 
     def close(self):
+        if not self.assert_hardware_enabled():
+            return
+
         for pin in self.pins:
             GPIO.setmode(pin, GPIO.OUT)
 

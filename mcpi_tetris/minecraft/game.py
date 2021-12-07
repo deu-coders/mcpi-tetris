@@ -4,8 +4,8 @@ from mcpi.minecraft import Minecraft
 from mcpi_tetris.core.network import ControllerNetwork, CONTROLLER_SERVER_PORT
 from mcpi_tetris.core.controller import Controller
 from mcpi_tetris.core.game import TetrisGame, TetrisPlayer
-from mcpi_tetris.hardware.lcd import Lcd
-from mcpi_tetris.hardware.led import Led
+from mcpi_tetris.hardware.lcd import LCD
+from mcpi_tetris.hardware.led import LED
 
 from .display import McpiDisplayAdapter
 
@@ -16,8 +16,8 @@ class McpiTetrisGame(TetrisGame):
     controllers: Dict[str, Controller]
     network: ControllerNetwork
 
-    led: Led
-    lcd: Lcd
+    led: LED
+    lcd: LCD
 
     turn_on_led_until: int = 0
 
@@ -30,11 +30,8 @@ class McpiTetrisGame(TetrisGame):
         self.network.serve()
         self.print_message(f'Also accepts controller input via socket (PORT={CONTROLLER_SERVER_PORT})!')
 
-        self.led = Led()
-        self.lcd = Lcd()
-
-        self.led.initialize()
-        self.lcd.initialize()
+        self.led = LED()
+        self.lcd = LCD()
 
     def create_controller(self, player_id: int) -> Controller:
         return Controller(player_id) # 빈 컨트롤러 사용

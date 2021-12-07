@@ -9,13 +9,19 @@ class Buzzer(Hardware):
     buzzer_pwm: Any = None
 
     def initialize(self):
+        self.name = 'Buzzer'
+
+        if not self.assert_hardware_enabled():
+            return
+
         self.setup(constants.PIN_BUZZER, GPIO.OUT)
         self.buzzer_pwm = self.PWM(constants.PIN_BUZZER, 10)
         self.buzzer_pwm.start(50)
 
     def play_tetris_bgm(self):
-        if self.buzzer_pwm is None:
-            self.initialize()
+        if not self.assert_hardware_enabled():
+            print('Cannot play music.')
+            return
 
         while True:
             try:

@@ -2,20 +2,21 @@ import RPi.GPIO as GPIO
 
 from mcpi_tetris.core.controller import Controller, TetrisKey
 import mcpi_tetris.hardware.constants as constants
+from .hardware import Hardware
 
 
-class RPiGPIOJoystickController(Controller):
+class RPiGPIOJoystickController(Controller, Hardware):
     """클라이언트 측에서 GPIO를 사용한 입력을 받을 때 사용"""
 
-    pin_up: int = constants.PIN_UP
-    pin_down: int = constants.PIN_DOWN
-    pin_left: int = constants.PIN_LEFT
-    pin_right: int = constants.PIN_RIGHT
-    pin_land: int = constants.PIN_LAND
+    pin_up: int
+    pin_down: int
+    pin_left: int
+    pin_right: int
+    pin_land: int
 
-    pin_join: int = constants.PIN_JOIN
-    pin_leave: int = constants.PIN_LEAVE
-    pin_start: int = constants.PIN_START
+    pin_join: int
+    pin_leave: int
+    pin_start: int
 
     def setpins(self, pin_up: int, pin_down: int, pin_left: int, pin_right: int, pin_land: int, pin_join: int, pin_leave: int, pin_start: int):
         self.pin_up = pin_up
@@ -27,8 +28,25 @@ class RPiGPIOJoystickController(Controller):
         self.pin_join = pin_join
         self.pin_leave = pin_leave
         self.pin_start = pin_start
-    
+
     def initialize(self):
+        self.name = 'Joystick'
+
+        if not self.assert_hardware_enabled():
+            return
+
+        self.setpins(
+            pin_up=constants.PIN_UP,
+            pin_down=constants.PIN_DOWN,
+            pin_left=constants.PIN_LEFT,
+            pin_right=constants.PIN_RIGHT,
+            pin_land=constants.PIN_LAND,
+
+            pin_join=constants.PIN_JOIN,
+            pin_leave=constants.PIN_LEAVE,
+            pin_start=constants.PIN_START,
+        )
+
         assert type(self.pin_up) is int \
             and type(self.pin_down) is int \
             and type(self.pin_left) is int \

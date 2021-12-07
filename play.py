@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 from mcpi_tetris.minecraft.nametools import get_username, set_username
 from mcpi_tetris.core.controller import Controller
+from mcpi_tetris.hardware.hardware import Hardware
 from music import play_music
 
 parser = argparse.ArgumentParser(description='Tetris over the mcpi!')
@@ -24,10 +25,14 @@ parser.add_argument('mode',
     ),
     help='테트리스 동작 모드를 설정합니다.'
 )
+parser.add_argument('--hardware', action='store_true', help='하드웨어를 활성화합니다.')
 
 args = parser.parse_args()
 
 load_dotenv()
+
+if args.hardware is not None:
+    Hardware.enable_hardwares()
 
 def get_controller(controller_name: str, player_id: int) -> Controller:
     if controller_name == 'keyboard-arrow':
@@ -120,5 +125,4 @@ elif args.mode.startswith('client-'):
 
 
 # Cleanup all hardwares
-from mcpi_tetris.hardware.hardware import Hardware
 Hardware.cleanup_hardwares()
