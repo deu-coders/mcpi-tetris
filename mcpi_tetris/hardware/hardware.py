@@ -24,6 +24,16 @@ class Hardware:
 
         GPIO.cleanup()
 
+    @staticmethod
+    def register_hardware(hardware: 'Hardware'):
+        Hardware.hardwares.append(hardware)
+        print(f'Registered hardware: {hardware.name}')
+
+    @staticmethod
+    def unregister_hardware(hardware: 'Hardware'):
+        Hardware.hardwares.remove(hardware)
+        print(f'Unregistered hardware: {hardware.name}')
+
     pins: List[int]
     pwms: List[Any]
     name: str
@@ -33,6 +43,7 @@ class Hardware:
         self.pwms = []
         self.name = 'Unknown'
 
+        self.register_hardware(self)
         self.initialize()
 
     def initialize(self):
@@ -73,7 +84,9 @@ class Hardware:
             return
 
         for pin in self.pins:
-            GPIO.setmode(pin, GPIO.OUT)
+            GPIO.setup(pin, GPIO.OUT)
 
         for pwm in self.pwms:
             pwm.stop()
+        
+        Hardware.unregister_hardware(self)
