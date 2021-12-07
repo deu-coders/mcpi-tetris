@@ -85,8 +85,10 @@ class McpiTetrisGame(TetrisGame):
     def poststop(self):
         self.network.close()
 
-    def onlinecompleted(self):
-        self.led.on('#00ff00')
+    def onlinecompleted(self, player_id: int, destroyed_lines: int):
+        self.print_message(f'Player {player_id} destroyed {destroyed_lines} lines!')
+
+        self.led.on(0x00FF00)
         self.turn_on_led_until = time.time() + 2
 
         players = sorted(self.players.values(), key=lambda player: -player.destroyed_lines)

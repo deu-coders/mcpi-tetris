@@ -118,9 +118,7 @@ class TetrisPlayer:
             # 테트로미노 설치 시 라인 스캐닝 후 파괴
             destroyed_lines = self.board.destroy_completed_lines()
             if destroyed_lines > 0:
-                self.display_adapter.onlinecompleted(destroyed_lines)
-                self.game.onlinecompleted()
-                self.destroyed_lines += destroyed_lines
+                self.onlinecompleted(destroyed_lines)
 
             # 다음 테트로미노 생성
             self.next_tetromino()
@@ -137,9 +135,14 @@ class TetrisPlayer:
 
         destroyed_lines = self.board.destroy_completed_lines()
         if destroyed_lines > 0:
-            self.display_adapter.onlinecompleted(destroyed_lines)
+            self.onlinecompleted(destroyed_lines)
         
         self.next_tetromino()
+
+    def onlinecompleted(self, destroyed_lines: int):
+        self.destroyed_lines += destroyed_lines
+        self.display_adapter.onlinecompleted(destroyed_lines)
+        self.game.onlinecompleted(self.controller.player_id, destroyed_lines)
 
     def rotate(self):
         """테트로미노를 회전함"""

@@ -160,7 +160,7 @@ class TetrisGame:
     def posttick(self):
         pass
 
-    def onlinecompleted(self):
+    def onlinecompleted(self, player_id: int, destroyed_lines: int):
         pass
 
 
