@@ -45,6 +45,9 @@ class TetrisPlayer:
     tick_counter: int = 0
     """게임 내 시간 흐름을 나타내는 단위. 1초당 tick_rate틱"""
 
+    speed_incrementer_tick_rate: int = 200
+    """스피드가 올라가는 속도. 기본값=200틱마다 스피드 1씩 증가"""
+
     speed: int = 1
     """테트로미노가 떨어지는 속도"""
 
@@ -175,7 +178,7 @@ class TetrisPlayer:
         self.board.set_tetromino(self.tetromino)
 
     def get_tetromino_fall_ticks(self) -> int:
-        return max(1, 20 - self.speed)
+        return max(5, 20 - self.speed)
 
     def tick(self):
         if self.playing:
@@ -199,6 +202,10 @@ class TetrisPlayer:
             # 테트로미노가 떨어질 타이밍인지 확인
             if self.tick_counter % self.get_tetromino_fall_ticks() == 0:
                 self.fall()
+
+            # 테트로미노의 스피드를 점점 증가 (최초엔 skip하기 위해 1을 더함)
+            if (self.tick_counter + 1) % self.speed_incrementer_tick_rate == 0:
+                self.speed += 1
 
         # 디스플레이 업데이트
         self.flush_display()
