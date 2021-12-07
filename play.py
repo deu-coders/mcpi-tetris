@@ -102,6 +102,8 @@ elif args.mode.startswith('client-'):
     username = get_username()
     print(f'Your username is "{username}".')
 
+    address = input('Please input controller server ip address: ')
+
     # flush all block events
     minecraft.events.pollBlockHits()
 
@@ -115,8 +117,6 @@ elif args.mode.startswith('client-'):
             break
 
     minecraft.postToChat(f'Good job, {username}. your id is {player_id}!')
-
-    address = input('Please input controller server ip address: ')
 
     controller = get_controller(controller_name, player_id)
 
