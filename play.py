@@ -26,6 +26,7 @@ parser.add_argument('mode',
     help='테트리스 동작 모드를 설정합니다.'
 )
 parser.add_argument('--hardware', action='store_true', help='하드웨어를 활성화합니다.')
+parser.add_argument('--music', action='store_true', help='BGM 음악을 재생합니다. --hardware 옵션이 필요합니다.')
 
 args = parser.parse_args()
 
@@ -65,7 +66,8 @@ elif args.mode == 'host':
     from mcpi.minecraft import Minecraft
     from mcpi_tetris.minecraft.game import McpiTetrisGame
 
-    play_music()
+    if args.music:
+        play_music()
 
     minecraft = Minecraft.create()
     game = McpiTetrisGame(minecraft)
