@@ -31,7 +31,7 @@ args = parser.parse_args()
 
 load_dotenv()
 
-if args.hardware is not None:
+if args.hardware or args.mode.endswith('-joystick'):
     Hardware.enable_hardwares()
 
 def get_controller(controller_name: str, player_id: int) -> Controller:
