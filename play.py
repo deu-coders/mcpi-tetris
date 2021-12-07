@@ -1,9 +1,9 @@
 import argparse
-import subprocess
 from dotenv import load_dotenv
 
 from mcpi_tetris.minecraft.nametools import get_username, set_username
 from mcpi_tetris.core.controller import Controller
+from music import play_music
 
 parser = argparse.ArgumentParser(description='Tetris over the mcpi!')
 parser.add_argument('mode',
@@ -60,7 +60,7 @@ elif args.mode == 'host':
     from mcpi.minecraft import Minecraft
     from mcpi_tetris.minecraft.game import McpiTetrisGame
 
-    subprocess.Popen(['python', 'play.py', 'music'])
+    play_music()
 
     minecraft = Minecraft.create()
     game = McpiTetrisGame(minecraft)
