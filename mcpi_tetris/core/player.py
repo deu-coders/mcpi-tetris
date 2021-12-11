@@ -1,6 +1,9 @@
 
 from typing import List, Optional, TYPE_CHECKING
-import random
+from random import Random
+import time
+
+from mcpi_tetris.record.logger import KeyLogger
 
 from .basic import Position
 from .controller import Controller, TetrisKey
@@ -54,6 +57,14 @@ class TetrisPlayer:
     destroyed_lines: int = 0
     """플레이 중 부순 라인 수"""
 
+    seed: Optional[int]
+    """랜덤 함수에 적용되는 시드 값"""
+
+    random: Random
+    """플레이어에 독립적인 랜덤 인스턴스"""
+
+    logger: KeyLogger
+
     def __init__(
         self,
         game: 'TetrisGame',
@@ -70,27 +81,38 @@ class TetrisPlayer:
         self.display_adapter = display_adapter
         self.controller = controller
 
-        if tetromino_definitions is None:
-            tetromino_definitions = [
-                DefaultTetrominoDefinitions.SHAPE_I,
-                DefaultTetrominoDefinitions.SHAPE_J,
-                DefaultTetrominoDefinitions.SHAPE_L,
-                DefaultTetrominoDefinitions.SHAPE_O,
-                DefaultTetrominoDefinitions.SHAPE_S,
-                DefaultTetrominoDefinitions.SHAPE_Z,
-                DefaultTetrominoDefinitions.SHAPE_T,
-            ]
-        
-        self.tetromino_definitions = tetromino_definitions
+        self.tetromino_definitions = tetromino_definitions if tetromino_definitions is not None else [
+            DefaultTetrominoDefinitions.SHAPE_I,
+            DefaultTetrominoDefinitions.SHAPE_J,
+            DefaultTetrominoDefinitions.SHAPE_L,
+            DefaultTetrominoDefinitions.SHAPE_O,
+            DefaultTetrominoDefinitions.SHAPE_S,
+            DefaultTetrominoDefinitions.SHAPE_Z,
+            DefaultTetrominoDefinitions.SHAPE_T,
+        ]
         self.board = TetrisBoard(width, height)
+
+        self.seed = int(time.time())
+        self.random = Random()
+        self.random.seed(self.seed)
+
+        self.logger = KeyLogger(self)
+
         self.display_adapter.preinitialize(self)
         self.controller.preinitialize(self)
 
         self.next_tetromino()
-    
+
+    def setlogger(self, logger: KeyLogger):
+        self.logger = logger
+
+    def setseed(self, seed: int):
+        self.seed = seed
+        self.random.seed(seed)
+
     def next_tetromino(self):
         self.tetromino = Tetromino(
-            random.choice(self.tetromino_definitions),
+            self.random.choice(self.tetromino_definitions),
             Position(self.width // 2, self.height - 1)
         )
 
@@ -201,7 +223,8 @@ class TetrisPlayer:
                 else:
                     continue # 다른 키는 무시
 
-                print(f'player_id={self.controller.player_id},tick={self.tick_counter},key={key}')
+                # 키 입력 기록
+                self.logger.onkeypress(key)
 
             # 테트로미노가 떨어질 타이밍인지 확인
             if self.tick_counter % self.get_tetromino_fall_ticks() == 0:
@@ -229,3 +252,4 @@ class TetrisPlayer:
         # clear resources
         self.display_adapter.close()
         self.controller.close()
+        self.logger.close()

@@ -1,9 +1,12 @@
 from typing import Dict
 import time
 
+from mcpi_tetris.record.logger import FileAttachedKeyLogger
+
 from .player import TetrisPlayer
 from .controller import Controller, KeyboardArrowController, TetrisKey
 from .display import ConsoleDisplayAdapter
+from mcpi_tetris.config import config
 
 
 class TetrisGame:
@@ -62,7 +65,11 @@ class TetrisGame:
             self.print_message(f'Player {player_id} is already joined tetris.')
             return
 
-        self.players[player_id] = self.create_player(player_id)
+        player = self.create_player(player_id)
+        if config.get('record'):
+            player.setlogger(FileAttachedKeyLogger(player))
+
+        self.players[player_id] = player
         self.print_message(f'Player {player_id} joined tetris.')
 
     def leave(self, player_id: int):
