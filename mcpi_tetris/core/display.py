@@ -74,7 +74,7 @@ class ConsoleDisplayAdapter(DisplayAdapter):
     def requestnextframe(self):
         for y in reversed(range(self.height)):
             for x in range(self.width):
-                print('□' if self.pixels[y][x] is None else '■', end='')
+                print('□' if self.pixels[y][x] is None else '■', end=' ')
             
             print()
 
