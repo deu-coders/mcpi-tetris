@@ -18,3 +18,15 @@ def play_music() -> bool:
         return False
 
     return True
+
+def play_music_loop():
+    from mcpi_tetris.hardware.buzzer import Buzzer
+    buzzer = Buzzer()
+    buzzer.play_tetris_bgm_loop()
+
+
+if __name__ == '__main__':
+    from mcpi_tetris.hardware.hardware import Hardware
+    Hardware.enable_hardwares()
+    play_music_loop()
+    Hardware.cleanup_hardwares()
