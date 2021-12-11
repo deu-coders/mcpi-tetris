@@ -11,64 +11,17 @@ class TetrisPacket:
     player_id: int
     key: TetrisKey
 
-    @staticmethod
-    def key_to_raw(key: TetrisKey) -> Optional[str]:
-        if key == TetrisKey.UP:
-            return 'up'
-        elif key == TetrisKey.DOWN:
-            return 'down'
-        elif key == TetrisKey.LEFT:
-            return 'left'
-        elif key == TetrisKey.RIGHT:
-            return 'right'
-        elif key == TetrisKey.LAND:
-            return 'land'
-
-        elif key == TetrisKey.JOIN:
-            return 'join'
-        elif key == TetrisKey.LEAVE:
-            return 'leave'
-        elif key == TetrisKey.START:
-            return 'start'
-
-        return None
-
-    @staticmethod
-    def raw_to_key(token: str) -> Optional[TetrisKey]:
-        if token == 'up':
-            return TetrisKey.UP
-        elif token == 'down':
-            return TetrisKey.DOWN
-        elif token == 'left':
-            return TetrisKey.LEFT
-        elif token == 'right':
-            return TetrisKey.RIGHT
-        elif token == 'land':
-            return TetrisKey.LAND
-
-        elif token == 'join':
-            return TetrisKey.JOIN
-        elif token == 'leave':
-            return TetrisKey.LEAVE
-        elif token == 'start':
-            return TetrisKey.START
-
-        return None
-
-    def __init__(self, player_id: int, key: TetrisKey):
+    def __init__(self, player_id: str, key: TetrisKey):
         self.player_id = player_id
         self.key = key
 
     @staticmethod
     def deserialize(raw: str) -> 'TetrisPacket':
         player_id, key = raw.split('-')
-        player_id = int(player_id)
-        key = TetrisPacket.raw_to_key(key)
-
-        return TetrisPacket(player_id, key)
+        return TetrisPacket(player_id, key.value)
 
     def serialize(self) -> str:
-        return f'{self.player_id}-{TetrisPacket.key_to_raw(self.key)}'
+        return f'{self.player_id}-{TetrisKey[self.key]}'
 
 
 class ControllerNetwork:
