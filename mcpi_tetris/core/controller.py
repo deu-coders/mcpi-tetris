@@ -1,7 +1,10 @@
 from collections import deque
 from enum import Enum
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 import keyboard
+
+if TYPE_CHECKING:
+    from mcpi_tetris.core.player import TetrisPlayer
 
 
 class TetrisKey(Enum):
@@ -21,19 +24,20 @@ class Controller:
     입력 장치를 나타내는 추상 클래스
     """
 
+    player: 'TetrisPlayer'
     player_id: int
     queue: deque
 
     def __init__(self, player_id: int):
         self.player_id = player_id
-        self.queue = deque()
 
     def get_description(self):
         return """
         비어있는 컨트롤러입니다. 구현이 필요합니다.
         """
 
-    def preinitialize(self):
+    def preinitialize(self, player: 'TetrisPlayer'):
+        self.player = player
         self.queue = deque()
         self.initialize()
 

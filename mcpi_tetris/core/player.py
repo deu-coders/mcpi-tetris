@@ -64,15 +64,11 @@ class TetrisPlayer:
         tetromino_definitions: Optional[List[TetrominoDefinition]] = None,
     ):
         self.game = game
-
         self.width = width
         self.height = height
 
         self.display_adapter = display_adapter
-        self.display_adapter.preinitialize(width, height)
-
         self.controller = controller
-        self.controller.preinitialize()
 
         if tetromino_definitions is None:
             tetromino_definitions = [
@@ -87,6 +83,8 @@ class TetrisPlayer:
         
         self.tetromino_definitions = tetromino_definitions
         self.board = TetrisBoard(width, height)
+        self.display_adapter.preinitialize(self)
+        self.controller.preinitialize(self)
 
         self.next_tetromino()
     

@@ -1,6 +1,8 @@
-from typing import List, Optional
-
+from typing import TYPE_CHECKING, List, Optional
 from .basic import Block, Color, Position
+
+if TYPE_CHECKING:
+    from mcpi_tetris.core.player import TetrisPlayer
 
 
 class DisplayAdapter:
@@ -8,15 +10,17 @@ class DisplayAdapter:
     다양한 디스플레이를 지원하기 위한 어답터 클래스
     """
 
+    player: 'TetrisPlayer'
     width: int
     height: int
 
     def __init__(self):
         pass
 
-    def preinitialize(self, width: int, height: int):
-        self.width = width
-        self.height = height
+    def preinitialize(self, player: 'TetrisPlayer'):
+        self.player = player
+        self.width = player.width
+        self.height = player.height
 
         self.initialize()
 
