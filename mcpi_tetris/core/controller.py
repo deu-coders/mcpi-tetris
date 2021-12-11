@@ -5,15 +5,15 @@ import keyboard
 
 
 class TetrisKey(Enum):
-    DOWN = 'down'
-    UP = 'up'
-    LEFT = 'left'
-    RIGHT = 'right'
-    LAND = 'land'
+    DOWN = 'DOWN'
+    UP = 'UP'
+    LEFT = 'LEFT'
+    RIGHT = 'RIGHT'
+    LAND = 'LAND'
 
-    JOIN = 'join'
-    LEAVE = 'leave'
-    START = 'start'
+    JOIN = 'JOIN'
+    LEAVE = 'LEAVE'
+    START = 'START'
 
 
 class Controller:
