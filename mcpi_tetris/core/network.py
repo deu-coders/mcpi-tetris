@@ -105,7 +105,8 @@ class ControllerNetwork:
         try:
             self.sock.shutdown(SHUT_RDWR)
         except Exception as e:
-            print('Error occured while shutdown socket.', e)
+            print('Error occured while shutdown socket.')
+            print(e)
             pass
         finally:
             self.sock.close()
