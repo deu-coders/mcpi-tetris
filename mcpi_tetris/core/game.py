@@ -162,7 +162,9 @@ class TetrisGame:
 
         self.posttick()
         self.sleep_until_next_tick()
-        self.tick_counter += 1
+
+        if self.playing:
+            self.tick_counter += 1
 
     def pretick(self):
         pass
