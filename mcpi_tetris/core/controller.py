@@ -3,9 +3,6 @@ from enum import Enum
 from typing import Deque, Optional
 import keyboard
 
-if TYPE_CHECKING:
-    from mcpi_tetris.core.player import TetrisPlayer
-
 
 class TetrisKey(Enum):
     DOWN = 'DOWN'
@@ -24,21 +21,20 @@ class Controller:
     입력 장치를 나타내는 추상 클래스
     """
 
-    player: 'TetrisPlayer'
     player_id: int
     queue: Deque
+    tick_counter: int = 0
 
     def __init__(self, player_id: int):
         self.player_id = player_id
+        self.queue = deque()
 
     def get_description(self):
         return """
         비어있는 컨트롤러입니다. 구현이 필요합니다.
         """
 
-    def preinitialize(self, player: 'TetrisPlayer'):
-        self.player = player
-        self.queue = deque()
+    def preinitialize(self):
         self.initialize()
 
     def initialize(self):
@@ -48,10 +44,10 @@ class Controller:
         self.queue.appendleft(key)
 
     def pop(self) -> Optional[TetrisKey]:
-        if len(self.queue) == 0:
-            return None
+        if len(self.queue) > 0:
+            return self.queue.pop()
 
-        return self.queue.pop()
+        return None
 
     def close(self):
         pass

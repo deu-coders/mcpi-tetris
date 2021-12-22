@@ -31,7 +31,7 @@ class RecordedController(Controller):
             return None
 
         tick, key = self.logs[0]
-        if tick <= self.player.tick_counter:
+        if tick <= self.tick_counter:
             self.logs.popleft()
             return key
 

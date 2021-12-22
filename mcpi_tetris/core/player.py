@@ -99,7 +99,7 @@ class TetrisPlayer:
         self.logger = KeyLogger(self)
 
         self.display_adapter.preinitialize(self)
-        self.controller.preinitialize(self)
+        self.controller.preinitialize()
 
         self.next_tetromino()
 

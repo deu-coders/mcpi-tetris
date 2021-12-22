@@ -80,12 +80,12 @@ class TetrisGame:
         self.players[player_id].close()
         del self.players[player_id]
         self.print_message(f'Player {player_id} leave tetris.')
-    
+
     def start(self):
         if self.playing:
             self.print_message('Tetris is already playing.')
             return
-        
+
         self.playing = True
         self.print_message(f'Start tetris game!!')
 
