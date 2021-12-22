@@ -23,17 +23,11 @@ if need_hardwares:
 username = get_username()
 
 minecraft = Minecraft.create()
-minecraft.events.pollBlockHits() # flush all block events
-minecraft.postToChat(f'{username}, please touch any block using sword')
-minecraft.postToChat('for identify your id!')
+player_id = minecraft.getPlayerEntityIds().pop(0)
 
-player_id = None
-while player_id is None:
-    for event in minecraft.events.pollBlockHits():
-        player_id = event.entityId
-        break
-
-minecraft.postToChat(f'Good job, {username}. your id is {player_id}!')
+print(f'[Client] Username={username}')
+print(f'[Client] Player ID={player_id}')
+minecraft.postToChat(f'Hello {username}! Your id is {player_id}!')
 
 controller = None
 if config.get('controller') == 'wasd':
