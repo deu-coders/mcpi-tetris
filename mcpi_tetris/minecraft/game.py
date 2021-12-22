@@ -50,14 +50,6 @@ class McpiTetrisGame(TetrisGame):
         self.minecraft.postToChat(f'[Tetris] {message}')
 
     def pretick(self):
-        # 소켓으로부터 데이터를 받은 후 controller에 push
-        for packet in self.network.recv():
-            player_id = packet.player_id
-            key = packet.key
-
-            if player_id in self.controllers:
-                self.controllers[player_id].push(key)
-
         # join, leave 감지하여 상태 업데이트
         old_players = set(self.controllers.keys())
         new_players = set(self.minecraft.getPlayerEntityIds())
@@ -75,6 +67,14 @@ class McpiTetrisGame(TetrisGame):
             if player_id not in old_players:
                 self.print_message(f'Player {player_id} join the world')
                 self.add_controller(self.create_controller(player_id))
+
+        # 소켓으로부터 데이터를 받은 후 controller에 push
+        for packet in self.network.recv():
+            player_id = packet.player_id
+            key = packet.key
+
+            if player_id in self.controllers:
+                self.controllers[player_id].push(key)
 
     def posttick(self):
         if self.turn_on_led_until != 0:
