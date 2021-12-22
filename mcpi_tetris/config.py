@@ -37,3 +37,4 @@ class Config:
 
 
 config = Config()
+config.load()
