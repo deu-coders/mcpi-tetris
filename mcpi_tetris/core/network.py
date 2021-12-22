@@ -87,7 +87,11 @@ class ControllerNetwork:
             tokens += client.tokens
             client.tokens.clear()
 
-        return map(TetrisPacket.deserialize, tokens)
+        packets = list(map(TetrisPacket.deserialize, tokens))
+        if len(packets) > 0:
+            print(f'[Network] Recv key from client: {", ".join(map(lambda packet: str(packet.key), packets))}')
+
+        return packets
 
     def connect(self, address) -> bool:
         try:
@@ -98,6 +102,7 @@ class ControllerNetwork:
         return True
 
     def send(self, player_id: int, key: TetrisKey):
+        print(f'[Network] Send key to server: {key}')
         raw = TetrisPacket(player_id, key).serialize() + ':'
         self.sock.send(raw.encode())
 
