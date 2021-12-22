@@ -18,10 +18,10 @@ class TetrisPacket:
     @staticmethod
     def deserialize(raw: str) -> 'TetrisPacket':
         player_id, key = raw.split('-')
-        return TetrisPacket(player_id, key.value)
+        return TetrisPacket(int(player_id), TetrisKey[key])
 
     def serialize(self) -> str:
-        return f'{self.player_id}-{TetrisKey[self.key]}'
+        return f'{self.player_id}-{self.key.value}'
 
 
 class ControllerNetwork:
