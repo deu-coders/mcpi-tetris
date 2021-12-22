@@ -11,6 +11,9 @@ class RecordedController(Controller):
     def initialize(self):
         self.logs = deque()
 
+        # Join self
+        self.logs.append((0, TetrisKey.JOIN))
+
         filename = config.get('play_recorded')
         with open(f'logs/play-{filename}.log', 'r', encoding='utf-8') as file:
             lines = file.read().split('\n')
