@@ -136,6 +136,9 @@ class TetrisGame:
             # 모든 컨트롤러에 대한 입력을 확인하고,
             # 게임 참여 또는 나가기 확인
             for controller in self.controllers.values():
+                # 컨트롤러의 tick_counter값을 업데이트
+                controller.tick_counter = self.tick_counter
+
                 while True:
                     key = controller.pop()
                     if key is None:
