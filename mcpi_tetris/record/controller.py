@@ -1,12 +1,12 @@
 from collections import deque
-from typing import List, Optional, Tuple
+from typing import Deque, List, Optional, Tuple
 from mcpi_tetris.core.controller import Controller, TetrisKey
 from mcpi_tetris.config import config
 
 
 class RecordedController(Controller):
 
-    logs: deque[Tuple[int, TetrisKey]]
+    logs: Deque[Tuple[int, TetrisKey]]
 
     def initialize(self):
         self.logs = deque()

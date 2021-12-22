@@ -1,6 +1,6 @@
 from collections import deque
 from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from typing import Deque, Optional
 import keyboard
 
 if TYPE_CHECKING:
@@ -26,7 +26,7 @@ class Controller:
 
     player: 'TetrisPlayer'
     player_id: int
-    queue: deque
+    queue: Deque
 
     def __init__(self, player_id: int):
         self.player_id = player_id

@@ -1,5 +1,5 @@
 from collections import deque
-from typing import Optional
+from typing import Deque, Optional
 import RPi.GPIO as GPIO
 
 from mcpi_tetris.core.controller import Controller, TetrisKey
@@ -9,7 +9,7 @@ from .hardware import Hardware
 
 class Joystick(Hardware):
 
-    queue: deque
+    queue: Deque
 
     def poll(self) -> Optional[TetrisKey]:
         if len(self.queue) == 0:
