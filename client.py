@@ -1,4 +1,5 @@
 import argparse
+import sys
 from mcpi.minecraft import Minecraft
 from mcpi_tetris.config import config
 from mcpi_tetris.minecraft.nametools import get_username
@@ -11,6 +12,7 @@ parser.add_argument('--controller', default='wasd', choices=(
     'wasd', 'arrow', 'stdin', 'joystick',
 ))
 parser.add_argument('--record', action='store_true', help='Record player\'s key inputs to file. (will saved into logs folder.)')
+parser.add_argument('--play-recorded', help='File to play recorded keys.')
 
 config.load_from_parser(parser)
 
@@ -19,6 +21,9 @@ need_hardwares = config.get('joystick')
 if need_hardwares:
     from mcpi_tetris.hardware.hardware import Hardware
     Hardware.enable_hardwares()
+
+if config.get('play_recorded') is not None:
+    config.set('controller', 'record')
 
 username = get_username()
 
