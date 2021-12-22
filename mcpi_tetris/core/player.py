@@ -203,6 +203,9 @@ class TetrisPlayer:
 
     def tick(self):
         if self.playing:
+            # 컨트롤러의 tick_counter값을 업데이트
+            self.controller.tick_counter = self.tick_counter
+
             # 키 이벤트 확인
             while True:
                 key = self.controller.pop()

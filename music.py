@@ -6,7 +6,7 @@ def play_music() -> bool:
 
     for python_binary in ['python3', 'python']:
         try:
-            subprocess.Popen([python_binary, 'play.py', 'music'])
+            subprocess.Popen([python_binary, 'music.py'])
             print(f'python binary found: {python_binary}')
             play_music_successed = True
             break

@@ -11,6 +11,10 @@ class Joystick(Hardware):
 
     queue: Deque
 
+    def __init__(self):
+        super().__init__()
+        self.queue = deque()
+
     def poll(self) -> Optional[TetrisKey]:
         if len(self.queue) == 0:
             return None
@@ -100,6 +104,10 @@ class RPiGPIOJoystickController(Controller):
     """클라이언트 측에서 GPIO를 사용한 입력을 받을 때 사용"""
 
     joystick: Joystick
+
+    def __init__(self, player_id: int):
+        super().__init__(player_id)
+        self.queue = deque()
 
     def initialize(self):
         self.joystick = Joystick()

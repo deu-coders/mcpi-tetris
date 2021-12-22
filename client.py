@@ -17,7 +17,7 @@ parser.add_argument('--ai', action='store_true', help='It\'s A.I.')
 
 config.load_from_parser(parser)
 
-need_hardwares = config.get('joystick')
+need_hardwares = config.get('controller') == 'joystick'
 
 if need_hardwares:
     from mcpi_tetris.hardware.hardware import Hardware

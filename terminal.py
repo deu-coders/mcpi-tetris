@@ -14,7 +14,7 @@ parser.add_argument('--play-recorded', help='File to play recorded keys.')
 
 config.load_from_parser(parser)
 
-need_hardwares = config.get('joystick')
+need_hardwares = config.get('controller') == 'joystick'
 
 if need_hardwares:
     from mcpi_tetris.hardware.hardware import Hardware
