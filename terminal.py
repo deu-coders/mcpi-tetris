@@ -7,7 +7,7 @@ from mcpi_tetris.core.game import ConsoleTetrisGame
 
 parser = argparse.ArgumentParser(description='Play tetris in terminal. (Single play only)')
 parser.add_argument('--controller', default='wasd', choices=(
-    'wasd', 'arrow', 'stdin', 'joystick', 'record',
+    'wasd', 'arrow', 'stdin', 'joystick',
 ))
 parser.add_argument('--record', action='store_true', help='Record player\'s key inputs to file. (will saved into logs folder.)')
 parser.add_argument('--play-recorded', help='File to play recorded keys.')
@@ -21,6 +21,9 @@ if need_hardwares:
     Hardware.enable_hardwares()
 
 player_id = 1
+
+if config.get('play_recorded') is not None:
+    config.set('controller', 'record')
 
 controller = None
 if config.get('controller') == 'wasd':
