@@ -47,6 +47,13 @@ elif config.get('controller') == 'stdin':
 elif config.get('controller') == 'joystick':
     from mcpi_tetris.hardware.controller import RPiGPIOJoystickController
     controller = RPiGPIOJoystickController(player_id)
+elif config.get('controller') == 'record':
+    if config.get('play_recorded') is None:
+        print('You should give --play-recorded option!! (e.x. --play-recorded 1639161407)')
+        sys.exit(1)
+
+    from mcpi_tetris.record.controller import RecordedController
+    controller = RecordedController(player_id)
 
 remote = McpiRemoteControl(minecraft, controller, config.get('ip'))
 remote.run()
