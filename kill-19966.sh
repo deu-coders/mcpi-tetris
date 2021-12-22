@@ -1,0 +1,1 @@
+sudo fuser -k 19966/tcp
