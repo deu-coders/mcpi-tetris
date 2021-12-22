@@ -17,9 +17,7 @@ class RecordedController(Controller):
         filename = config.get('play_recorded')
         with open(f'logs/play-{filename}.log', 'r', encoding='utf-8') as file:
             lines = file.read().split('\n')
-
             data = {key: value for key, value in map(lambda token: token.split('='), lines[0].split(','))}
-            self.player.setseed(int(data['seed']))
 
             for line in lines[1:]:
                 if len(line.strip()) == 0:

@@ -92,7 +92,7 @@ class TetrisPlayer:
         ]
         self.board = TetrisBoard(width, height)
 
-        self.seed = int(time.time())
+        self.seed = 1640170508
         self.random = Random()
         self.random.seed(self.seed)
 
